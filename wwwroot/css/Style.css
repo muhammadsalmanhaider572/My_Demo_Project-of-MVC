@@ -1,0 +1,113 @@
+﻿/* Reset */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body */
+
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    background: #F3F4F6;
+}
+
+/* Sidebar */
+
+.sidebar {
+    width: 280px;
+    height: 100vh;
+    background: #111827;
+}
+/* ==========================
+        Logo Section
+========================== */
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 25px;
+}
+
+/* Logo Image */
+
+.logo-icon img {
+    width: 45px;
+    height: 45px;
+}
+
+/* Logo Text */
+
+.logo h2 {
+    color: white;
+    font-size: 34px;
+    font-weight: 700;
+}
+/* Menu Title */
+
+.menu-title {
+    color: #7C8799;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    margin: 25px 0 15px 25px;
+}
+/* Remove Bullets */
+
+.menu {
+    list-style: none;
+}
+
+    /* Space Around Menu */
+
+    .menu li {
+        margin: 8px 15px;
+    }
+
+/* Menu Link */
+
+.menu-link {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: #D1D5DB;
+    padding: 15px;
+    border-radius: 12px;
+    transition: .3s;
+}
+.menu-icon {
+    font-size: 18px;
+    width: 30px;
+}
+.menu-text {
+    margin-left: 12px;
+    flex: 1;
+    font-size: 18px;
+}
+.arrow {
+    font-size: 14px;
+}
+.menu-link:hover {
+    background: #1E293B;
+}
+.sub-menu {
+    list-style: none;
+    display: none;
+    margin-left: 55px;
+}
+
+    .sub-menu li {
+        margin: 15px 0;
+    }
+
+        .sub-menu li a {
+            color: #cbd5e1;
+            text-decoration: none;
+            font-size: 15px;
+        }
+
+.menu-link {
+    cursor: pointer;
+}

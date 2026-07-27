@@ -1,0 +1,110 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - My_Demo_Project</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/My_Demo_Project.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+</head>
+<body>
+    <header>
+      
+       
+        
+
+            <!-- Sidebar Starts -->
+
+            @* <aside class="sidebar">
+
+            </aside>
+
+            <!-- Sidebar Ends --> *@
+        <aside class="sidebar">
+            <div class="logo">
+
+                <div class="logo-icon">
+
+                    <img src="https://img.icons8.com/fluency/48/dashboard-layout.png" alt="Logo">
+
+                </div>
+
+                <h2>TailAdmin</h2>
+
+            </div>
+            <!-- Menu Heading -->
+
+            <p class="menu-title">MENU</p>
+
+            <ul class="menu">
+
+                <li>
+
+                    <a href="#" class="menu-link">
+
+                        <span class="menu-icon">⬜</span>
+
+                        <span class="menu-text">
+                            Dashboard
+                        </span>
+
+                        <span class="arrow">
+                            ▼
+                        </span>
+
+                    </a>
+
+                </li>
+
+            </ul>
+            <ul class="menu">
+
+                <li class="menu-item">
+
+                    <div class="menu-link">
+
+                        <span class="menu-icon">
+                            <i class="fa-solid fa-house"></i>
+                        </span>
+
+                        <span class="menu-text">
+                            Dashboard
+                        </span>
+
+                        <span class="arrow">
+                            <i class="fa-solid fa-chevron-down"></i>
+                        </span>
+
+                    </div>
+
+                    <ul class="sub-menu">
+
+                        <li><a href="#">Ecommerce</a></li>
+                        <li><a href="#">Analytics</a></li>
+                        <li><a href="#">Marketing</a></li>
+                        <li><a href="#">CRM</a></li>
+                        <li><a href="#">Stocks</a></li>
+                        <li><a href="#">SaaS</a></li>
+                        <li><a href="#">Logistics</a></li>
+
+                    </ul>
+
+                </li>
+
+            </ul>
+        </aside>
+       
+    </header>
+            @RenderBody()
+        </main>
+    </div>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+<script src="~/js/Function.js" asp-append-version="true"></script>
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
