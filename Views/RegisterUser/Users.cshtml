@@ -1,0 +1,85 @@
+@model IEnumerable<My_Demo_Project.Models.User>
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="container mt-4">
+
+    <!-- Heading + Add Button -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+
+        <h2>Users</h2>
+
+        @* <a asp-controller="RegisterUser"
+           asp-action="RegisterUser"
+           class="btn btn-primary">
+            + Add
+        </a> *@
+
+    </div>
+
+
+        <div class="text-end mb-3">
+        <button type="button"
+                onclick="openAddUser()"
+                class="btn btn-primary">
+            + Add
+        </button>
+    </div>
+
+    <!-- Users Grid -->
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <table class="table table-bordered table-striped">
+
+                <thead class="table-dark">
+
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Role title</th>
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var user in Model)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.Name</td>
+                                <td>@user.Email</td>
+                                <td>@user.Role</td>
+                                <td>@user.Phone</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="4" class="text-center">No users found.</td>
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>
+<script>
+    function openAddUser() {
+        debugger;
+        window.location.href = '/RegisterUser/RegisterUser';
+    }
+</script>

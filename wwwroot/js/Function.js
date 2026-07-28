@@ -16,3 +16,16 @@ menuLink.addEventListener("click", function () {
     }
 
 });
+// cAI Assistant
+
+const aiMenu = document.querySelector(".ai-menu-link");
+
+const aiItem = document.querySelector(".ai-menu-item");
+
+
+aiMenu.addEventListener("click", function () {
+
+    aiItem.classList.toggle("active");
+
+});
+

@@ -1,0 +1,202 @@
+@model My_Demo_Project.Models.User
+@{
+    ViewData["Title"] = "Register User";
+}
+
+<div class="container mt-4">
+    <h2>Register User</h2>
+
+    <div id="registerForm" class="mt-3">
+        <div id="validationSummary" class="text-danger mb-2"></div>
+
+        <div class="row g-3">
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Name" class="form-label"></label>
+                    <input asp-for="Name" class="form-control" id="Name" />
+                    <span data-valmsg-for="Name" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Username" class="form-label"></label>
+                    <input asp-for="Username" class="form-control" id="Username" />
+                    <span data-valmsg-for="Username" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label"></label>
+                    <input asp-for="Password" class="form-control" type="password" id="Password" />
+                    <span data-valmsg-for="Password" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label"></label>
+                    <input asp-for="Email" class="form-control" id="Email" />
+                    <span data-valmsg-for="Email" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Phone" class="form-label"></label>
+                    <input asp-for="Phone" class="form-control" id="Phone" maxlength="11" pattern="\\d{11}" inputmode="numeric" oninput="this.value = this.value.replace(/\D/g, '');" />
+                    <span class="form-text">Enter 11 digits (numbers only).</span>
+                    <span data-valmsg-for="Phone" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-6">
+                <div class="mb-3">
+                    <label asp-for="Role" class="form-label"></label>
+                    <select asp-for="Role" class="form-select" id="Role">
+                        <option value="">Select role...</option>
+                    </select>
+                    <span data-valmsg-for="Role" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-3">
+            <button type="button" class="btn btn-primary" onclick="saveUser()">Save</button>
+            <a asp-action="Users" asp-controller="RegisterUser" class="btn btn-secondary ms-2">Cancel</a>
+        </div>
+    </div>
+
+    <script>
+        function setFieldError(field, message) {
+            const el = document.querySelector('[data-valmsg-for="' + field + '"]');
+            if (el) el.textContent = message || '';
+        }
+
+        function clearErrors() {
+            document.getElementById('validationSummary').textContent = '';
+            ['Name','Username','Password','Email','Phone','Role'].forEach(f => setFieldError(f, ''));
+        }
+
+        function saveUser() {
+            clearErrors();
+
+            const user = {
+                Name: document.getElementById('Name').value.trim(),
+                Username: document.getElementById('Username').value.trim(),
+                Password: document.getElementById('Password').value,
+                Email: document.getElementById('Email').value.trim(),
+                Phone: document.getElementById('Phone').value.trim(),
+                Role: document.getElementById('Role').value
+            };
+
+            // Client-side validation without regex literals (avoid Razor parsing issues)
+            function isLetter(ch) { return ch.toLowerCase() !== ch.toUpperCase(); }
+            function hasLetter(s) { return s.split('').some(isLetter); }
+            function isDigit(ch) { return ch >= '0' && ch <= '9'; }
+            function allDigits(s) { return s.length > 0 && s.split('').every(isDigit); }
+            function hasUpper(s) { return s.split('').some(c => c >= 'A' && c <= 'Z'); }
+            function hasDigitIn(s) { return s.split('').some(isDigit); }
+            function hasSpecial(s) { return s.split('').some(c => !((c >= '0' && c <= '9') || (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || c === '_')); }
+
+            let hasError = false;
+            if (!(user.Name.length >= 3 && user.Name.length <= 50 && hasLetter(user.Name))) { setFieldError('Name', 'Name must be 3-50 characters and include at least one letter.'); hasError = true; }
+            if (!(user.Username.length >= 4 && user.Username.length <= 20 && isLetter(user.Username.charAt(0)) && user.Username.split('').every(c => (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c >= '0' && c <= '9') || c === '_'))) { setFieldError('Username', 'Username must start with a letter and be 4-20 chars (letters, numbers, underscore).'); hasError = true; }
+            if (!(user.Password.length >= 8 && hasUpper(user.Password) && hasDigitIn(user.Password) && hasSpecial(user.Password))) { setFieldError('Password', 'Password must be at least 8 chars and include an uppercase letter, a digit and a special character.'); hasError = true; }
+            // Email: simple checks for at symbol and dot and no spaces
+            var atChar = String.fromCharCode(64);
+            if (!(user.Email.indexOf(atChar) > 0 && user.Email.indexOf('.') > user.Email.indexOf(atChar) + 1 && user.Email.indexOf(' ') === -1)) { setFieldError('Email', 'Enter a valid email address.'); hasError = true; }
+            if (!(user.Phone.length === 11 && allDigits(user.Phone))) { setFieldError('Phone', 'Phone must be exactly 11 digits.'); hasError = true; }
+            if (!user.Role) { setFieldError('Role', 'Please select a role.'); hasError = true; }
+
+            if (hasError) {
+                document.getElementById('validationSummary').textContent = 'Please fix the errors and try again.';
+                return;
+            }
+
+            fetch('/RegisterUser/RegisterUser', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(user)
+            })
+            .then(async res => {
+                if (res.ok) {
+                    window.location.href = '/RegisterUser/Users';
+                    return;
+                }
+                const data = await res.json().catch(() => null);
+                if (data && data.errors) {
+                    // modelstate errors coming from server
+                    for (const key in data.errors) {
+                        const msgs = data.errors[key].map(e => e.errorMessage).join(' ');
+                        setFieldError(key, msgs);
+                    }
+                } else {
+                    document.getElementById('validationSummary').textContent = 'Server error. Please try again.';
+                }
+            })
+            .catch(() => {
+                document.getElementById('validationSummary').textContent = 'Network error. Please try again.';
+            });
+        }
+
+        function loadRoles() {
+            fetch('/RegisterUser/GetRoles')
+                .then(res => res.json())
+                .then(list => {
+                    const sel = document.getElementById('Role');
+                    // remove existing options except placeholder
+                    for (let i = sel.options.length - 1; i >= 0; i--) {
+                        if (sel.options[i].value) sel.remove(i);
+                    }
+                    list.forEach(r => {
+                        const opt = document.createElement('option');
+                        opt.value = r;
+                        opt.textContent = r;
+                        sel.appendChild(opt);
+                    });
+                })
+                .catch(() => { /* ignore */ });
+        }
+
+        function addRole() {
+            const name = document.getElementById('newRoleName').value.trim();
+            if (!name) {
+                document.getElementById('validationSummary').textContent = 'Enter a role name.';
+                return;
+            }
+            fetch('/RegisterUser/AddRole', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name })
+            })
+            .then(async res => {
+                if (res.ok) {
+                    // append to select and select it
+                    const sel = document.getElementById('Role');
+                    const opt = document.createElement('option');
+                    opt.value = name;
+                    opt.textContent = name;
+                    sel.appendChild(opt);
+                    sel.value = name;
+                    document.getElementById('newRoleName').value = '';
+                    clearErrors();
+                    return;
+                }
+                const data = await res.json().catch(() => null);
+                document.getElementById('validationSummary').textContent = (data && data.error) ? data.error : 'Could not add role.';
+            })
+            .catch(() => {
+                document.getElementById('validationSummary').textContent = 'Network error while adding role.';
+            });
+        }
+
+        // Load roles on page load
+        loadRoles();
+    </script>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
